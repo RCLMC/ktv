@@ -1,0 +1,347 @@
+function calcURR(form) {
+	var urr = document.urr;
+	var preBUN = form.preBUN.value;
+	var postBUN = form.postBUN.value;
+	var weight = form.weight.value;
+	var wtUnits = form.wtUnits.selectedIndex;
+	var uf = form.uf.value;
+	if (!checkError2(preBUN, "preBUN", "pre-dialysis BUN")) return false;
+	if (!checkError2(postBUN, "postBUN", "post-dialysis BUN")) return false;
+	if (!checkError2(weight, "weight", "patient's weight")) return false;
+	if (!checkError2(uf, "uf", "amount of ultrafiltrate")) return false;
+
+// Change weight to kilograms
+	if (wtUnits == 1) {weight *= 0.45359}
+
+	var r = postBUN / preBUN;
+	var urrVal = (1 - r) * 100;
+	var ktv = -Math.log(r-0.03) + (4 - 3.5*r) * uf/weight;
+
+	form.urr.value = roundNum(urrVal,1);
+	form.ktv.value = roundNum(ktv,2);
+
+	return;
+}
+
+function calcKTV(form) {
+	if (!checkForm()) return false;
+	var ktv = document.ktv;
+	var k = ktv.k.value;
+	var t = ktv.t.value;
+	var tUnits = ktv.tUnits.selectedIndex;
+	if (!checkError(t, "t", "dialysis time")) return false;
+	if (tUnits == 1) {t *= 60}
+	ktvCalc(k, t);
+
+	if (document.all) {document.all.dTime.style.color = "#000000";}
+		else if (document.getElementById) {document.getElementById.dTime.style.color = "#000000";}
+	ktv.whatButton.value = 1;
+	return true;
+}
+
+function calcTime(form) {
+	if (!checkForm()) return false;
+	var ktv = document.ktv;
+	var k = ktv.k.value;
+	var ktvTarget = ktv.ktvTarget.value;
+
+	if (!checkError(ktvTarget, "ktvTarget", "target Kt/V value")) return false;
+	timeCalc(ktvTarget, k);
+
+	if (document.all) {document.all.dTime.style.color = "#0000ff";}
+		else if (document.getElementById) {document.getElementById.dTime.style.color = "#0000ff";}
+
+	ktv.whatButton.value = 2;
+	return true;
+}
+
+function calcVol() {
+	var ktv = document.ktv;
+	var height = ktv.height.value;
+	var htUnits = ktv.htUnits.selectedIndex;
+	var weight = ktv.weight.value;
+	var wtUnits = ktv.wtUnits.selectedIndex;
+	var age = ktv.age.value;
+	var sex = ktv.sex.selectedIndex;
+	var diabetes = ktv.diabetes.selectedIndex;
+	var volChoice = ktv.volChoice.selectedIndex;
+
+// Convert height to centimeters
+	if (htUnits == 1) {height *= 100}
+	if (htUnits == 2) {height *= 2.54}
+	if (htUnits == 3) {height *= 30.48}
+
+// Convert weight to kg
+	if (wtUnits == 1) {weight *= 0.45359}
+
+// Calculate Watson formula
+	if (sex == 0) {wVol = -2.097 + (0.1069*height) + (0.2466*weight)}
+		else {wVol = 2.447 - (0.09156*age) + (0.1074*height) + (0.3362*weight)}
+
+// Calculate Hume-Weyers formula
+	if (sex == 0) {hwVol = (0.34454*height) + (0.183809*weight) - 35.270121}
+		else {hwVol = (0.194786*height) + (0.296785*weight) - 14.012934}
+
+// Calculate Chertow's Bioelectrical Impedance formula
+	cVol = height*(0.0186104*weight + 0.12703384) + weight*(0.11262857*sex + 0.00104135*age - 0.00067247*weight - 0.04012056) - age*(0.03486146*sex + 0.07493713) - sex*1.01767992 + diabetes*0.57894981;
+
+/*	newcVol = -0.07493713*age - 1.01767992*sex + 0.12703384*height - 0.04012056*weight + 0.57894981*diabetes - 0.00067247*weight*weight - 0.03486146*age*sex + 0.11262857*sex*weight + 0.00104135*age*weight + 0.0186104*height*weight;
+
+	alert("height = " + height + "\nweight = " + weight + "\nage = " + age + "\nsex = " + sex + "\ndiabetes = " + diabetes + "\n\ncVol = " + cVol + "\nnewcVol = " + newcVol);
+*/
+
+// Calculate Mellits-Cheek formula
+	if (sex == 0 && height < 110.8) {kidsVol = 0.076 + 0.507*weight + 0.013*height}
+	if (sex == 0 && height >= 110.8) {kidsVol = -10.313 + 0.252*weight + 0.154*height}
+	if (sex == 1 && height < 132.7) {kidsVol = -1.927 + 0.465*weight + 0.045*height}
+	if (sex == 1 && height >= 132.7) {kidsVol = -21.993 + 0.406*weight + 0.209*height}
+
+// Calculate 0.6 x weight
+	var regVol = 0.6*weight;
+
+	ktv.wVol.value = wVol;
+	ktv.hwVol.value = hwVol;
+	ktv.cVol.value = cVol;
+	ktv.kidsVol.value = kidsVol;
+	ktv.regVol.value = regVol;
+
+	if (volChoice == 0) {var vol = wVol;}
+	if (volChoice == 1) {var vol = hwVol;}
+	if (volChoice == 2) {var vol = cVol;}
+	if (volChoice == 3) {if (ktv.volChoice[3].text == "Mellits-Cheek formula (kids)") {var vol = kidsVol;} else {var vol = regVol;}}
+	if (volChoice == 4) {var vol = regVol;}
+
+	// alert("volChoice = " + volChoice + "\nvol = " + vol);
+
+	vol = roundNum(vol,1);
+	ktv.vol.value = vol;
+	return vol;
+}
+
+function checkAge(age) {
+	if (!checkError(age, "age", "patient's age")) return false;
+	var volChoice = document.ktv.volChoice;
+	//  alert (volChoice.options[3].text);
+	if (age <= 20) {
+		if (volChoice.options[3].text != "Mellits-Cheek formula (kids)") {
+			volChoice.options[3].text = "Mellits-Cheek formula (kids)";
+			volChoice.options[4] = new Option("0.6 x weight");
+		}
+	} else {
+		if (volChoice.options[3].text == "Mellits-Cheek formula (kids)") {volChoice.options[3] = null}
+	}
+
+	return;
+}
+
+function changeVol() {
+	var ktv = document.ktv;
+	var volChoice = ktv.volChoice.selectedIndex;
+
+	if (volChoice == 0) {var vol = ktv.wVol.value}
+	if (volChoice == 1) {var vol = ktv.hwVol.value}
+	if (volChoice == 2) {var vol = ktv.cVol.value}
+	if (volChoice == 3) {if (ktv.volChoice[3].text == "Mellits-Cheek formula (kids)") {var vol = ktv.kidsVol.value} else {var vol = ktv.regVol.value}}
+	if (volChoice == 4) {var vol = ktv.regVol.value}
+
+/*	alert("wVol = " + ktv.wVol.value + "\nhwVol = " + ktv.hwVol.value +
+		"\ncVol = " + ktv.cVol.value + "\nkidsVol = " + ktv.kidsVol.value +
+		"\nregVol = " + ktv.regVol.value);
+*/
+	ktv.vol.value = roundNum(vol,1);
+
+	changeWhat();
+	return true;
+}
+
+function checkForm() {
+	var ktv = document.ktv;
+	var k = ktv.k.value;
+	var t = ktv.t.value;
+	var height = ktv.height.value;
+	var weight = ktv.weight.value;
+	var age = ktv.age.value;
+	var ktvTarget = ktv.ktvTarget.value;
+
+	if (!checkError(k, "k", "dialyzer urea clearance (K)")) return false;
+	if (!checkError(height, "height", "patient's height")) return false;
+	if (!checkError(weight, "weight", "patient's weight")) return false;
+	if (!checkError(age, "age", "patient's age")) return false;
+	return true;
+}
+
+function checkError(whatVar, varName, varText) {
+	if ((whatVar == "") || (whatVar <= 0) || (isNaN(whatVar))) {
+		alert("Please enter the " + varText + ".");
+		eval("document.ktv." + varName + ".focus();");
+		eval("document.ktv." + varName + ".select();");
+		return false;
+	}
+	return true;
+}
+
+function checkError2(whatVar, varName, varText) {
+	if ((whatVar == "") || (whatVar <= 0) || (isNaN(whatVar))) {
+		alert("Please enter the " + varText + ".");
+		eval("document.urr." + varName + ".focus();");
+		eval("document.urr." + varName + ".select();");
+		return false;
+	}
+	return true;
+}
+
+function ktvCalc(k, t) {
+	var ktv = document.ktv;
+	var k = ktv.k.value;
+	var t = ktv.t.value;
+
+	var vol = calcVol();
+	var whatKTV = k * t / vol;
+	ktv.ktv.value = roundNum(whatKTV,2);
+
+	return;
+}
+
+function timeCalc(ktvTarget, k) {
+	var ktv = document.ktv;
+	var k = ktv.k.value;
+	var ktvTarget = ktv.ktvTarget.value;
+	var vol = calcVol();
+
+	var t = ktvTarget * vol / k;
+	t = roundNum(t,0);
+	ktv.t.value = t;
+	ktv.tUnits.selectedIndex = 0;
+
+	return;
+}
+
+function changeWhat() {
+	var ktv = document.ktv;
+	var whatButton = ktv.whatButton.value;
+	var k = ktv.k.value;
+
+	if (whatButton == 1) {		// Calculate Kt/V
+		checkError(k, "k", "dialyzer urea clearance (K)");
+		var t = ktv.t.value;
+		var tUnits = ktv.tUnits.selectedIndex;
+		checkError(t, "t", "dialysis time");
+		if (tUnits == 1) {t *= 60}
+		ktvCalc(k, t);
+
+		return;
+	} else if (whatButton == 2) {	// Calculate time, from Kt/V
+		checkError(k, "k", "dialyzer urea clearance (K)");
+		var ktvTarget = ktv.ktvTarget.value;
+		checkError(ktvTarget, "ktvTarget", "target Kt/V value");
+		timeCalc(ktvTarget, k);
+
+		return;
+	}
+
+	return;
+}
+
+function quickVals() {
+	var ktv = document.ktv;
+	ktv.k.value = 2.3;
+	ktv.t.value = 240;
+	ktv.age.value = 53;
+	ktv.height.value = 175;
+	ktv.weight.value = 70;
+	ktv.sex.selectedIndex = 1;
+	return;
+}
+
+
+
+function calcGFR(form) {
+	var ucr = form.ucr.value;
+	var pcr = form.pcr.value;
+	var uvol = form.uvol.value;
+	var volUnits = form.volUnits.selectedIndex;
+	var utime = form.utime.value;
+	var timeUnits = form.timeUnits.selectedIndex;
+	var height = form.height.value;
+	var htUnits = form.htUnits.selectedIndex;
+	var weight = form.weight.value;
+	var wtUnits = form.wtUnits.selectedIndex;
+
+	if ((pcr == "") || (pcr <=0) || (isNaN(pcr))) {
+		alert("Please enter the serum creatinine.");
+		form.pcr.focus();
+		form.pcr.select();
+		return false;
+	}
+
+	if ((ucr == "") || (ucr <=0) || (isNaN(ucr))) {
+		alert("Please enter the urine creatinine.");
+		form.ucr.focus();
+		form.ucr.select();
+		return false;
+	}
+
+	if ((uvol == "") || (uvol <=0) || (isNaN(uvol))) {
+		alert("Please enter the total urine volume.");
+		form.uvol.focus();
+		form.uvol.select();
+		return false;
+	}
+
+	if ((utime == "") || (utime <=0) || (isNaN(utime))) {
+		alert("Please enter the total urine collection time.");
+		form.utime.focus();
+		form.utime.select();
+		return false;
+	}
+
+// Convert urine volume to cc
+	if (volUnits == 2) {uvol *= 1000}
+	if (volUnits == 3) {uvol *= 29.57}
+	if (volUnits == 4) {uvol *= 236.59}
+	if (volUnits == 5) {uvol *= 473.18}
+	if (volUnits == 6) {uvol *= 946.35}
+	if (volUnits == 7) {uvol *= 3785.41}
+
+// Convert collection time to minutes
+	if (timeUnits == 1) {utime *= 60}
+
+
+
+
+// Creatinine Clearance
+	var bsa = height * weight / 3600;
+	bsa = Math.sqrt(bsa);
+	var gfr = (ucr * uvol) / (pcr * utime);
+	gfr = roundNum(gfr,1);
+	form.gfr.value = gfr;
+
+	if (height != "" && weight != "") {
+	if ((height <= 0) || (isNaN(height))) {
+		alert("Please enter the patient's height.");
+		form.height.focus();
+		form.height.select();
+		form.gfrCorrect.value = "";
+		return false;
+	}
+
+	if ((weight <= 0) || (isNaN(weight))) {
+		alert("Please enter the patient's weight.");
+		form.weight.focus();
+		form.weight.select();
+		form.gfrCorrect.value = "";
+		return false;
+	}
+
+		var gfrCorrect = gfr * 1.73 / bsa;
+		gfrCorrect = roundNum(gfrCorrect,1);
+		form.gfrCorrect.value = gfrCorrect;
+	} else {form.gfrCorrect.value = ""}
+}
+
+function roundNum(thisNum,dec) {
+	thisNum = thisNum * Math.pow(10,dec)
+	thisNum = Math.round(thisNum)
+	thisNum = thisNum / Math.pow(10,dec)
+	return thisNum
+}

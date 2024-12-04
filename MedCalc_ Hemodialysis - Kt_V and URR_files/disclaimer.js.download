@@ -1,0 +1,3 @@
+document.writeln("<font face=\"Arial, Helvetica, sans-serif\" size=\"-2\">" +
+		"DISCLAIMER: All calculations must be confirmed before use. The authors make no claims of the accuracy of the information contained herein; and these suggested doses are not a substitute for clinical judgement. " + 
+		"Neither MedCalc.com nor any other party involved in the preparation or publication of this site shall be liable for any special, consequential, or exemplary damages resulting in whole or part from any user's use of or reliance upon this material.</font><br>");

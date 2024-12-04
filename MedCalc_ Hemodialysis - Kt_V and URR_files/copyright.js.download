@@ -1,0 +1,3 @@
+	thisYear = new Date();
+	document.writeln("Copyright &copy; 1999-" + thisYear.getFullYear() + 
+		"&nbsp; <A href=\"mailto:webmaster@medcalc.com\">MedCalc.com</A><BR>");

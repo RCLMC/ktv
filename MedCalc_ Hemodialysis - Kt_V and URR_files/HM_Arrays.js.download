@@ -1,0 +1,234 @@
+/***************************************************************************
+                            Version 4 Menu ARRAYS
+***************************************************************************/
+function getReal(xy,el){
+    if((HM_IE)||(HM_DOM)){
+       Pos=(xy=="x")?el.offsetLeft:el.offsetTop;
+       if ((HM_IE)&&(!HM_Mac)&&(el.tagName)&&
+           (el.tagName.toUpperCase()=="TABLE")&&
+           (el.border)&&(el.border>0)) Pos++;
+       tmpEl=el.offsetParent;
+       while(tmpEl!=null){
+          Pos+=(xy=="x")?tmpEl.offsetLeft:tmpEl.offsetTop;
+          if ((HM_IE)&&(!HM_Mac)&&(tmpEl.tagName)&&
+              (tmpEl.tagName.toUpperCase()=="TABLE")&&
+              (tmpEl.border)&&(tmpEl.border>0)) Pos++;
+          tmpEl=tmpEl.offsetParent;
+       }
+    }else{
+       Pos=(xy=="x")?el.x:el.y;
+    }
+    if (HM_IE&&HM_Mac) {
+       MacOffset=(xy=="x")?(document.body.currentStyle.marginLeft) :
+                           (document.body.currentStyle.marginTop);
+       if(MacOffset.indexOf('%')!=-1){
+          MacSize=(xy=="x")?parseInt(document.body.offsetWidth) :
+                            parseInt(document.body.offsetHeight);
+          MacOffset=(parseInt(MacOffset)/100)*MacSize;
+       }else{
+          MacOffset=parseInt(MacOffset)
+       }
+       Pos+=MacOffset;
+    }
+    return Pos;
+}
+function findXY(elementid,xory) {
+    var thePlacer = HM_DOM ? document.getElementById(elementid) :
+                    HM_IE ? document.all(elementid) : document.images[elementid];
+    retVal=getReal(xory,thePlacer);
+    return retVal;
+}
+
+HM_Array1 = [
+[160,							// menu width
+"findXY('Menu','x')",			// left_position
+"findXY('Menu','y')",			// top_position
+"yellow",						// font_color
+"orange",						// mouseover_font_color
+"#006666",						// background_color
+"#007777",						// mouseover_background_color
+"#006666",						// border_color
+"#006666",						// separator_color
+1,								// top_is_permanent
+0,								// top_is_horizontal
+0,								// tree_is_horizontal
+1,								// position_under
+1,								// top_more_images_visible
+1,								// tree_more_images_visible
+"null",							// evaluate_upon_tree_show
+"null",							// evaluate_upon_tree_hide
+1,								// right_to_left
+0],								// display_on_click
+["General","",1,0,1],
+["Cardiology","",1,0,1],
+["Drugs / Pharm","",1,0,1],
+["Fluids / Electrolytes","",1,0,1],
+["Obstetrics","",1,0,1],
+["Pediatrics","",1,0,1],
+["Pulmonary","",1,0,1],
+["Renal","",1,0,1]
+]
+
+//  General
+HM_Array1_1 = [
+[],
+["Age / Date Calc","http://www.medcalc.com/datediff.html",1,0,0],
+["Baysean Analysis","http://www.medcalc.com/bayes.html",1,0,0],
+["Blank Calendar","http://www.medcalc.com/calendar.html",1,0,0],
+["Body Mass Index","http://www.medcalc.com/body.html",1,0,0],
+["Heparin Protocol","http://www.medcalc.com/heparin.html",1,0,0],
+["Weights & Measures","http://www.medcalc.com/wtmeas.html",1,0,0]
+]
+//  Cardiology
+HM_Array1_2 = [
+[],
+["Endocarditis: Duke","http://www.medcalc.com/endocarditis.html",1,0,0],
+["Heart Disease Risk","http://www.medcalc.com/heartrisk.html",1,0,0],
+["Heparin Protocol","http://www.medcalc.com/heparin.html",1,0,0],
+["Periop Cardiac Eval","http://www.medcalc.com/periop.html",1,0,0],
+["QT Corrected","http://www.medcalc.com/qtc.html",1,0,0]
+]
+
+//  Drugs / Pharm
+HM_Array1_3 = [
+[],
+["Dextrose IV Convert <img src='http://www.medcalc.com/pics/new.gif'>","http://www.medcalc.com/dextrose.html",1,0,0],
+["Ingested Substances","http://www.medcalc.com/bloodlevel.html",1,0,0],
+["IV Rate","http://www.medcalc.com/ivrate.html",1,0,0],
+["Narcotic Converter","http://www.medcalc.com/narcotics.html",1,0,0],
+["Steroid Converter","http://www.medcalc.com/steroid.html",1,0,0],
+["Vancomycin PK <img src='http://www.medcalc.com/pics/updated.gif'>","http://www.medcalc.com/pk",1,0,0]
+// ["Vancomycin PK","http://www.medcalc.com/pk.html",1,0,0]
+]
+
+//  Fluids / Electrolytes
+HM_Array1_4 = [
+[],
+["Anion Gap","http://www.medcalc.com/aniongap.html",1,0,0],
+["Dextrose IV Convert <img src='http://www.medcalc.com/pics/new.gif'>","http://www.medcalc.com/dextrose.html",1,0,0],
+["FeNa & TTKG","http://www.medcalc.com/fena.html",1,0,0],
+["Free Water Deficit","http://www.medcalc.com/freewater.html",1,0,0],
+["Hypo/Hypernatremia <img src='http://www.medcalc.com/pics/new.gif'>","http://www.medcalc.com/sodium.html",1,0,0],
+["IV Rate","http://www.medcalc.com/ivrate.html",1,0,0],
+["NICU: Fluids","http://www.medcalc.com/nicufen.html",1,0,0],
+["NICU: Quick Drip","http://www.medcalc.com/drip.html",1,0,0],
+["NICU: Quick IV","http://www.medcalc.com/iv.html",1,0,0],
+["Osmolality (Serum)","http://www.medcalc.com/osmol.html",1,0,0],
+["Pedi Fluids","http://www.medcalc.com/pedifen.html",1,0,0],
+["Sodium Corrected","http://www.medcalc.com/correctna.html",1,0,0],
+["Total Body Water","http://www.medcalc.com/tbw.html",1,0,0]
+]
+
+//  Obstetrics
+HM_Array1_5 = [
+[],
+["Pregnancy Dates","http://www.medcalc.com/pregnancy.html",1,0,0],
+["Pregnancy Wheel","http://www.medcalc.com/pregwheel.html",1,0,0]
+]
+
+//  Pediatrics
+HM_Array1_6 = [
+[],
+["APGAR Scores","http://www.medcalc.com/apgar.html",1,0,0],
+["Ballard Score","http://www.medcalc.com/ballard.html",1,0,0],
+["Dosing Calc","http://www.medcalc.com/pedidose.html",1,0,0],
+["Fluids - Pedi","http://www.medcalc.com/pedifen.html",1,0,0],
+["GFR - Pedi","http://www.medcalc.com/pedigfr.html",1,0,0],
+// ["Growth Charts <img src='http://www.medcalc.com/pics/updated.gif'>","http://www.charliehu.com/growth",1,0,0],
+["Growth Charts <img src='http://www.medcalc.com/pics/updated.gif'>","http://www.medcalc.com/growth",1,0,0],
+["Immunizations","http://www.medcalc.com/shots.html",1,0,0],
+["NICU Fluids","http://www.medcalc.com/nicufen.html",1,0,0],
+["NICU: Quick Drip","http://www.medcalc.com/drip.html",1,0,0],
+["NICU: Quick IV","http://www.medcalc.com/iv.html",1,0,0]
+]
+
+//  Pulmonary
+HM_Array1_7 = [
+[],
+["ABG Calculator","http://www.medcalc.com/acidbase.html",1,0,0],
+["A-a Gradient","http://www.medcalc.com/aagrad.html",1,0,0],
+["Oxygen Index","http://www.medcalc.com/oxygen.html",1,0,0]
+]
+//  Renal
+HM_Array1_8 = [
+[],
+["Creatinine Clear","http://www.medcalc.com/crcl.html",1,0,0],
+["FeNa & TTKG","http://www.medcalc.com/fena.html",1,0,0],
+["Free Water Deficit","http://www.medcalc.com/freewater.html",1,0,0],
+["GFR - Adult","http://www.medcalc.com/gfr.html",1,0,0],
+["GFR - Pedi","http://www.medcalc.com/pedigfr.html",1,0,0],
+["Hypo/Hypernatremia <img src='../pics/new.gif'>","http://www.medcalc.com/sodium.html",1,0,0],
+["Kt/V and URR","http://www.medcalc.com/hd.html",1,0,0],
+["Sodium Corrected","http://www.medcalc.com/correctna.html",1,0,0],
+["Total Body Water","http://www.medcalc.com/tbw.html",1,0,0],
+["Urea Vol Distrib","http://www.medcalc.com/tbw.html",1,0,0]
+]
+
+/*
+HM_Array3 = [
+[120,      // menu width
+200,       // left_position
+300,       // top_position
+"black",   // font_color
+"white",   // mouseover_font_color
+"white",   // background_color
+"black",   // mouseover_background_color
+"black",   // border_color
+"gray",    // separator_color
+0,         // top_is_permanent
+0,         // top_is_horizontal
+0,         // tree_is_horizontal
+1,         // position_under
+1,         // top_more_images_visible
+1,         // tree_more_images_visible
+"null",    // evaluate_upon_tree_show
+"null",    // evaluate_upon_tree_hide
+,          // right_to_left
+],     // display_on_click
+["Experts","http://www.webreference.com/experts/",1,0,1],
+["Contents","http://www.webreference.com/index2.html",1,0,0],
+["Services","http://www.webreference.com/index2.html",1,0,1],
+["About","http://www.webreference.com/about.html",1,0,0]
+]
+
+HM_Array4 = [
+[120,
+"mouse_x_position + 20",
+"mouse_y_position + 20",
+,,,,,,,,,,,,,,,
+true],
+["Experts","http://www.webreference.com/experts/",1,0,1],
+["Contents","http://www.webreference.com/index2.html",1,0,0],
+["Services","http://www.webreference.com/index2.html",1,0,0],
+["About","http://www.webreference.com/about.html",1,0,0]
+]
+
+HM_Array5 = [
+[100,                          // menu_width
+70, // left_position
+170,                            // top_position
+"red",                         // font_color
+"yellow",                      // mouseover_font_color
+"yellow",                      // background_color
+"black",                       // mouseover_background_color
+"blue",                        // border_color
+"green",                       // separator_color
+1,                             // top_is_permanent
+1,                             // top_is_horizontal
+0,                             // tree_is_horizontal
+1,                             // position_under
+0,                             // top_more_images_visible
+1,                             // tree_more_images_visible
+"null",                        // evaluate_upon_tree_show
+"null",                        // evaluate_upon_tree_hide
+,							   // right_to_left
+,						   // display_on_click
+true,						   // top_is_variable_width
+,						   	   // tree_is_variable_width
+],
+["Experts","http://www.webreference.com/experts/",1,0,1],
+["Contents","http://www.webreference.com/index2.html",1,0,0],
+["Services","http://www.webreference.com/index2.html",1,0,1],
+["About","http://www.webreference.com/about.html",1,0,0]
+]
+*/
