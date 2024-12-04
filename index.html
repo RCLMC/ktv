@@ -1,0 +1,321 @@
+
+<!-- saved from url=(0030)http://www.medcalc.com/hd.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>MedCalc: Hemodialysis - Kt/V and URR</title>
+<meta name="description" content="Online Clinical Calculators">
+<meta name="keywords" content="medcalc, mdcalc, medicalc, medmath, mdmath, clinicalc, clincalc, online, clinical, calculator, medical, javascript, medicine, pediatrics, ob, gyn">
+<meta name="author" content="Charles Y. Hu">
+</head>
+
+<body>
+<style type="text/css">
+	.tdtext {font-family:Arial;font-size:0.14in;}
+	.tdFont	{font-family:Arial, Helvetica, sans-serif;font-size:0.14in;}
+	.small {font-family:Arial, Helvetica, sans-serif;font-size:0.1in;}
+	td {font-family:Arial, Helvetica, sans-serif;font-size:0.14in;}
+	th {font-family:Arial, Helvetica, sans-serif;font-size:0.14in;}
+</style>
+<script language="JavaScript" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/hd.js.download"></script>
+
+<table border="0" cellspacing="0" cellpadding="5">
+	<tbody><tr>
+		<td bgcolor="#006666" width="150" valign="top">
+		<script language="JavaScript" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/calclinks.js.download"></script><b><font size="-1" color="#FFFF00" face="Arial">
+&nbsp;<br><center>Clinical Calculators</center>
+<p></p><hr><p>
+<img name="Menu" id="Menu" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/spacerTr.gif" width="160" height="335" border="0" align="LEFT">
+<script language="JavaScript1.2" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_Arrays.js.download" type="text/javascript"></script><script language="JavaScript1.2" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_ScriptDOM.js.download" type="text/javascript"></script>
+		</p></font></b></td>
+		<td valign="top">
+		
+<!-- span style="font-family:Symbol;">d</span> = delta -->
+
+<font size="+2" face="Times New Roman"><b style="font-family: Arial, Helvetica, sans-serif;">Med</b>Calc:
+Hemodialysis - Kt/V and URR
+</font><p>
+<!--span class=tdtext style="color:blue;">
+	<b>*</b> = optional information<br>
+</span-->
+
+<table border="0" cellspacing="2" cellpadding="0"><tbody><tr><td valign="top">
+
+<form method="post" name="ktv">
+	<input type="hidden" name="wVol">
+	<input type="hidden" name="hwVol">
+	<input type="hidden" name="cVol">
+	<input type="hidden" name="kidsVol">
+	<input type="hidden" name="regVol">
+	<input type="hidden" name="whatButton" value="0">
+<table border="0" cellpadding="3" cellspacing="0">
+<tbody><tr bgcolor="#ffffcc">
+	<td align="right">Dialyzer Urea<br>Clearance <b>(K) : </b></td>
+	<td>
+		<input name="k" type="text" size="4" maxlength="4" onchange="if(this.value==&#39;b&#39;){quickVals();}"> L/min
+	</td>
+
+	<td align="right" id="dTime">Dialysis Time <b>(t) : </b></td>
+	<td>
+		<input name="t" type="text" size="4" maxlength="4">
+		<select name="tUnits">
+			<option>minutes
+			</option><option>hours
+		</option></select>
+	</td>
+</tr>
+
+<tr bgcolor="#ffffcc">
+	<th align="right">Height : </th>
+	<td><input name="height" type="text" size="4" maxlength="5">
+	<select name="htUnits">
+		<option>cm
+		</option><option>meters
+		</option><option>inches
+		</option><option>feet
+	</option></select>
+	</td>
+
+	<th align="right">Weight : </th>
+	<td><input name="weight" type="text" size="4" maxlength="5" onchange="document.urr.weight.value=this.value;document.urr.wtUnits.selectedIndex=this.form.wtUnits.selectedIndex;">
+	<select name="wtUnits" onchange="document.urr.weight.value=this.form.weight.value;document.urr.wtUnits.selectedIndex=this.selectedIndex;">
+		<option>kilograms
+		</option><option>pounds
+	</option></select>
+	</td>
+</tr>
+
+<tr bgcolor="#ffffcc">
+	<th align="right">
+		<!--span class=tdtext style="color:blue;">*</span-->
+		Age :</th>
+	<td><input name="age" type="text" size="4" maxlength="4" onchange="checkAge(this.value);"> years</td>
+
+	<th align="right">
+		<!--span class=tdtext style="color:blue;">*</span-->
+		Gender :</th>
+	<td>
+	<select name="sex">
+		<option>female
+		</option><option>male
+	</option></select>
+	</td>
+</tr>
+
+<tr bgcolor="#ffffcc">
+	<th align="right">
+		<!--span class=tdtext style="color:blue;">*</span-->
+		Target Kt/V :</th>
+	<td align="left"><input name="ktvTarget" type="text" size="4" maxlength="4" value="1.2">
+	</td>
+	<th align="right">Diabetes?</th>
+	<td><select name="diabetes">
+		<option>no
+		</option><option>yes
+	</option></select></td>
+</tr>
+
+<tr bgcolor="#ffffcc">
+	<td colspan="4" align="center">
+	<input type="button" value="Calculate Kt/V" onclick="calcKTV(this.form);">
+	<input type="button" value="Calculate t" onclick="calcTime(this.form);">
+	<input type="reset">
+	</td>
+</tr>
+
+<tr bgcolor="#cccccc">
+	<td colspan="2" align="right"><b>Urea Volume Distrib (V)</b><br>
+		<select name="volChoice" onchange="changeVol();">
+			<option>Watson formula
+			</option><option>Hume-Weyer formula
+			</option><option>Bioelectrical impedance
+			</option><option>Mellits-Cheek formula (kids)
+			</option><option>0.6 x weight
+		</option></select>
+		<b> : </b>
+	</td>
+	<td colspan="2" align="left" valign="bottom"><input name="vol" size="5"> liters</td>
+</tr>
+<tr bgcolor="#cccccc">
+	<td colspan="2" align="right"><b>Kt/V : </b></td>
+	<td colspan="2" align="left"><input name="ktv" size="5"></td>
+</tr>
+</tbody></table>
+</form>
+</td><td valign="top">
+
+<form method="post" name="urr">
+<table border="0" cellspacing="0" cellpadding="2">
+<tbody><tr bgcolor="#ffff99">
+	<th align="right">Pre-dialysis BUN : </th>
+	<td align="left"><input type="text" name="preBUN" size="4" maxlength="5"> mg/dL</td>
+</tr>
+
+<tr bgcolor="#ffff99">
+	<th align="right">Post-dialysis BUN : </th>
+	<td align="left"><input type="text" name="postBUN" size="4" maxlength="5"> mg/dL</td>
+</tr>
+
+<tr bgcolor="#ffff99">
+	<th align="right">Post-dialysis Weight : </th>
+	<td align="left"><input type="text" name="weight" size="4" maxlength="5" onchange="document.ktv.weight.value=this.value;document.ktv.wtUnits.selectedIndex=this.form.wtUnits.selectedIndex;"> 
+		<select name="wtUnits" onchange="document.ktv.weight.value=this.form.weight.value;document.ktv.wtUnits.selectedIndex=this.selectedIndex;">
+			<option>kilograms
+			</option><option>pounds
+		</option></select>
+	</td>
+</tr>
+
+<tr bgcolor="#ffff99">
+	<th align="right">Ultrafiltrate Removed : </th>
+	<td align="left"><input type="text" name="uf" size="4" maxlength="5"> liters</td>
+</tr>
+
+<tr bgcolor="#ffff99">
+	<td colspan="2" align="center">
+	<input type="button" value="Calculate URR" onclick="calcURR(this.form);">
+	<input type="reset">
+	</td>
+</tr>
+
+<tr bgcolor="#cccccc">
+	<th align="right">Urea Reduction Ratio : </th>
+	<td align="left"><input type="text" name="urr" size="4"> %
+</td></tr>
+
+<tr bgcolor="#cccccc">
+	<th align="right">Kt/V : </th>
+	<td align="left"><input type="text" name="ktv" size="4">
+</td></tr>
+</tbody></table>
+</form>
+</td></tr></tbody></table>
+</p><p>
+
+
+
+<table border="0" cellpadding="2" cellspacing="0" bgcolor="#dddddd">
+<tbody><tr>
+	<th rowspan="2" valign="top" align="right">Watson :</th>
+	<td align="right"><nobr>Male TBW = </nobr></td>
+	<td align="left"> 2.447 - (0.09156 x age) + (0.1074 x height) + (0.3362 x weight)</td>
+</tr>
+<tr>
+	<td align="right"><nobr>Female TBW = </nobr></td>
+	<td align="left"> -2.097 + (0.1069 x height) + (0.2466 x weight)</td>
+</tr>
+
+<tr bgcolor="#eeeeee">
+	<th rowspan="2" valign="top" align="right">Hume-Weyers :</th>
+	<td align="right"><nobr>Male TBW = </nobr></td>
+	<td align="left"> (0.194786 x height) + (0.296785 x weight) - 14.012934</td>
+</tr>
+<tr bgcolor="#eeeeee">
+	<td align="right"><nobr>Female TBW = </nobr></td>
+	<td align="left"> (0.34454 x height) + (0.183809 x weight) - 35.270121</td>
+</tr>
+
+<tr>
+	<th colspan="3" valign="top" align="left">Chertow's Bioelectrical Impedance:</th>
+</tr>
+<tr>
+	<td> </td>
+	<td align="right">TBW = </td>
+	<td align="left" class="small"> ht x (0.0186104 x wt + 0.12703384) + wt x (0.11262857 x male + 0.00104135 x age - 0.00067247 x wt - 0.04012056) - age x (0.03486146 x male + 0.07493713) - male x 1.01767992 + diabetes x 0.57894981</td>
+</tr>
+
+<tr bgcolor="#eeeeee">
+	<th rowspan="4" valign="top" align="right">Mellits-Cheek (kids) :</th>
+	<td rowspan="2" valign="top" align="right"><nobr>Boys TBW </nobr></td>
+	<td align="left">= -1.927 + 0.465 x weight + 0.045 x height, <b>for height &lt; 132.7 cm</b></td>
+</tr>
+<tr bgcolor="#eeeeee">
+	<td align="left">= -21.993 + 0.406 x weight + 0.209 x height, <b>for height &gt; 132.7 cm</b>
+</td></tr>
+<tr bgcolor="#eeeeee">
+	<td rowspan="2" valign="top" align="right"><nobr>Girls TBW </nobr></td>
+	<td align="left">= 0.076 + 0.507 x weight + 0.013 x height, <b>for height &lt; 110.8 cm</b></td>
+</tr>
+<tr bgcolor="#eeeeee">
+	<td align="left">= -10.313 + 0.252 x weight + 0.154 x height, <b>for height &gt; 110.8 cm</b></td></tr>
+
+<tr>
+	<td colspan="2" valign="center" align="right">
+		<nobr><b>Urea Reduction Ratio : </b>URR = (1 -</nobr>
+	</td>
+	<td valign="center" align="left">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tbody><tr><td align="center" class="small">post-BUN</td>
+		<td rowspan="3" valign="middle" align="left"> ) x 100</td></tr>
+		<tr><td align="center"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/filler.gif" width="100%" height="1"></td></tr>
+		<tr><td align="center" class="small">pre-BUN</td></tr>
+	</tbody></table>
+	</td>
+</tr>
+
+<tr bgcolor="#eeeeee">
+	<td colspan="2" valign="center" align="right">
+		<nobr><b>Daugirdas : </b>Kt/V = -ln(</nobr>
+	</td>
+	<td valign="center" align="left">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tbody><tr>
+		<td align="center" class="small">post-BUN</td>
+		<td rowspan="3" valign="middle">&nbsp;- 0.03) + (4 - 3.5 x&nbsp;</td>
+		<td align="center" class="small">post-BUN</td>
+		<td rowspan="3" valign="middle">) x&nbsp;</td>
+		<td align="center" class="small">UF</td>
+		</tr>
+		<tr>
+		<td align="center"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/filler.gif" width="100%" height="1"></td>
+		<td align="center"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/filler.gif" width="100%" height="1"></td>
+		<td align="center"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/filler.gif" width="100%" height="1"></td>
+		</tr>
+		<tr>
+		<td align="center" class="small">pre-BUN</td>
+		<td align="center" class="small">pre-BUN</td>
+		<td align="center" class="small">weight</td>
+		</tr>
+	</tbody></table>
+	</td>
+</tr>
+
+<tr><td colspan="3" class="small">
+<b>Hume R, Weyers E.</b> Relationship between total body water and surface area in normal and obese subjects. <i>J Clin Pathol</i> 24:234-238, 1971.<br>
+
+<b>Watson PE, Watson ID, Batt RD.</b> Total body water volumes for adult males and females estimated from simple anthropometric measurements. A<i>m J Clin Nutr</i> 33:27-39, 1980.<br>
+
+<b>Chertow GM, Lowrie EG, Lew NL, Lazarus JM.</b> Development of a population-specific regression equation to estimate total body water in hemodialysis patients. <i>Kid Int</i> 51:1578-1582, 1997.<br>
+
+<b>Daugirdas JT.</b> Second generation logarithmic estimates of single-pool variable volume Kt/V: an analysis of error. <i>J Am Soc Nephrol</i> 4:1205-1213, 1993.
+</td></tr>
+</tbody></table>
+
+
+
+
+	</p><p><script language="JavaScript" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/disclaimer.js.download"></script><font face="Arial, Helvetica, sans-serif" size="-2">DISCLAIMER: All calculations must be confirmed before use. The authors make no claims of the accuracy of the information contained herein; and these suggested doses are not a substitute for clinical judgement. Neither MedCalc.com nor any other party involved in the preparation or publication of this site shall be liable for any special, consequential, or exemplary damages resulting in whole or part from any user's use of or reliance upon this material.</font><br>
+
+	</p><hr><font face="Arial" size="-2">
+	<script language="JavaScript" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/copyright.js.download"></script>Copyright © 1999-2022&nbsp; <a href="mailto:webmaster@medcalc.com">MedCalc.com</a><br>
+
+	Created: Monday, November 5, 2001<br>
+	Last Modified:
+<script language="JavaScript" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/lastmod.js.download"></script>Wednesday, January 27, 2010
+</font>
+		</td>
+	</tr>
+</tbody></table>
+<!-- WiredMinds eMetrics tracking with Enterprise Edition V5.4 START -->
+<script type="text/javascript" src="./MedCalc_ Hemodialysis - Kt_V and URR_files/count.js.download"></script>
+<script type="text/javascript"><!--
+wm_custnum='99e095bc059a9f98';
+wm_page_name='hd.html';
+wm_group_name='/services/webpages/m/e/medcalc.com/public';
+wm_campaign_key='campaign_id';
+wm_track_alt='';
+wiredminds.count();
+// -->
+</script>
+<!-- WiredMinds eMetrics tracking with Enterprise Edition V5.4 END -->
+
+
+<div id="HM_Menu1" style="position: absolute; visibility: visible; left: 13px; top: 71px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 182px; z-index: 5000;"><div id="HM_Item1_1" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">General</div><div id="HM_Item1_2" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Cardiology</div><div id="HM_Item1_3" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Drugs / Pharm</div><div id="HM_Item1_4" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Fluids / Electrolytes</div><div id="HM_Item1_5" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 92px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Obstetrics</div><div id="HM_Item1_6" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 115px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Pediatrics</div><div id="HM_Item1_7" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 138px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Pulmonary</div><div id="HM_Item1_8" style="position: absolute; visibility: inherit; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 161px;"><img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/HM_More_black_left.gif" hspace="0" vspace="0" width="5" style="position: absolute; top: 8px; left: 8px;">Renal</div></div><div id="HM_Menu1_1" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 136px;"><div id="HM_Item1_1_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">Age / Date Calc</div><div id="HM_Item1_1_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">Baysean Analysis</div><div id="HM_Item1_1_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;">Blank Calendar</div><div id="HM_Item1_1_4" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;">Body Mass Index</div><div id="HM_Item1_1_5" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 92px;">Heparin Protocol</div><div id="HM_Item1_1_6" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 115px;">Weights &amp; Measures</div></div><div id="HM_Menu1_2" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 113px;"><div id="HM_Item1_2_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">Endocarditis: Duke</div><div id="HM_Item1_2_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">Heart Disease Risk</div><div id="HM_Item1_2_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;">Heparin Protocol</div><div id="HM_Item1_2_4" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;">Periop Cardiac Eval</div><div id="HM_Item1_2_5" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 92px;">QT Corrected</div></div><div id="HM_Menu1_3" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 136px;"><div id="HM_Item1_3_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">Dextrose IV Convert <img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/new.gif"></div><div id="HM_Item1_3_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">Ingested Substances</div><div id="HM_Item1_3_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;">IV Rate</div><div id="HM_Item1_3_4" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;">Narcotic Converter</div><div id="HM_Item1_3_5" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 92px;">Steroid Converter</div><div id="HM_Item1_3_6" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 115px;">Vancomycin PK <img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/updated.gif"></div></div><div id="HM_Menu1_4" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 297px;"><div id="HM_Item1_4_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">Anion Gap</div><div id="HM_Item1_4_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">Dextrose IV Convert <img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/new.gif"></div><div id="HM_Item1_4_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;">FeNa &amp; TTKG</div><div id="HM_Item1_4_4" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;">Free Water Deficit</div><div id="HM_Item1_4_5" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 92px;">Hypo/Hypernatremia <img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/new.gif"></div><div id="HM_Item1_4_6" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 115px;">IV Rate</div><div id="HM_Item1_4_7" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 138px;">NICU: Fluids</div><div id="HM_Item1_4_8" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 161px;">NICU: Quick Drip</div><div id="HM_Item1_4_9" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 184px;">NICU: Quick IV</div><div id="HM_Item1_4_10" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 207px;">Osmolality (Serum)</div><div id="HM_Item1_4_11" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 230px;">Pedi Fluids</div><div id="HM_Item1_4_12" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 253px;">Sodium Corrected</div><div id="HM_Item1_4_13" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 276px;">Total Body Water</div></div><div id="HM_Menu1_5" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 44px;"><div id="HM_Item1_5_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">Pregnancy Dates</div><div id="HM_Item1_5_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 23px;">Pregnancy Wheel</div></div><div id="HM_Menu1_6" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 228px;"><div id="HM_Item1_6_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">APGAR Scores</div><div id="HM_Item1_6_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">Ballard Score</div><div id="HM_Item1_6_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;">Dosing Calc</div><div id="HM_Item1_6_4" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;">Fluids - Pedi</div><div id="HM_Item1_6_5" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 92px;">GFR - Pedi</div><div id="HM_Item1_6_6" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 115px;">Growth Charts <img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/updated.gif"></div><div id="HM_Item1_6_7" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 138px;">Immunizations</div><div id="HM_Item1_6_8" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 161px;">NICU Fluids</div><div id="HM_Item1_6_9" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 184px;">NICU: Quick Drip</div><div id="HM_Item1_6_10" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 207px;">NICU: Quick IV</div></div><div id="HM_Menu1_7" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 67px;"><div id="HM_Item1_7_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">ABG Calculator</div><div id="HM_Item1_7_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">A-a Gradient</div><div id="HM_Item1_7_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 46px;">Oxygen Index</div></div><div id="HM_Menu1_8" style="position: absolute; visibility: hidden; left: -500px; top: -2000px; width: 156px; border-width: 2px; border-color: rgb(0, 102, 102); border-style: solid; overflow: hidden; cursor: default; height: 228px;"><div id="HM_Item1_8_1" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 0px;">Creatinine Clear</div><div id="HM_Item1_8_2" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 23px;">FeNa &amp; TTKG</div><div id="HM_Item1_8_3" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 46px;">Free Water Deficit</div><div id="HM_Item1_8_4" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 69px;">GFR - Adult</div><div id="HM_Item1_8_5" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 92px;">GFR - Pedi</div><div id="HM_Item1_8_6" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 115px;">Hypo/Hypernatremia <img src="./MedCalc_ Hemodialysis - Kt_V and URR_files/new.gif"></div><div id="HM_Item1_8_7" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 138px;">Kt/V and URR</div><div id="HM_Item1_8_8" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 161px;">Sodium Corrected</div><div id="HM_Item1_8_9" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; border-bottom: 2px solid rgb(0, 102, 102); left: 0px; width: 137px; top: 184px;">Total Body Water</div><div id="HM_Item1_8_10" style="position: absolute; visibility: inherit; cursor: pointer; background-color: rgb(0, 102, 102); color: yellow; padding: 3px 3px 3px 16px; font: bold 10pt Arial, sans-serif; left: 0px; width: 137px; top: 207px;">Urea Vol Distrib</div></div></body></html>
